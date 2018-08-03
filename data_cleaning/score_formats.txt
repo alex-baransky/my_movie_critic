@@ -1,0 +1,32 @@
+Score formats:
+
+X-Y Stars
+1/5
+1/4
+8.0/10
+70/100
+A-
+A minus
+***
+not recommended
+recommended
+4 of 5
+4:5
+B=
+
+
+
+A+ = 1
+A = .925
+A- = .85
+B+ = .775
+B = .7
+B- = .625
+C+ = .55
+C = .475
+C- = .4
+D+ = .325
+D = .25
+D- = .175
+F = 0
+
