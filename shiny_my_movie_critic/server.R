@@ -15,6 +15,14 @@ function(input, output, session) {
     updateTextInput(session, 'movie4', value = '---Fourth movie---')
     updateTextInput(session, 'movie5', value = '---Fifth movie---')
   })
+  # Allows user to reset selected ratings to default
+  observeEvent(input$clearRating, {
+    updatePrettyRadioButtons(session, 'rating1', selected = 0)
+    updatePrettyRadioButtons(session, 'rating2', selected = 0)
+    updatePrettyRadioButtons(session, 'rating3', selected = 0)
+    updatePrettyRadioButtons(session, 'rating4', selected = 0)
+    updatePrettyRadioButtons(session, 'rating5', selected = 0)
+    })
   # Updates movie selection based on data table rows selected
   observeEvent(input$movie_table_rows_selected, {
     rows = input$movie_table_rows_selected
@@ -123,6 +131,11 @@ function(input, output, session) {
       select('Critic Name' = critic, 'Organisation(s)' = orgs, 'How Many of Your Movies Scored?' = user_movies_reviewed,
              'Critic Match Score' = diff_sum)
     
+    # Render critic match table
+    output$match_table = DT::renderDataTable({
+      datatable(critic_match_df, rownames = FALSE)
+    })
+    
     updateTabsetPanel(session, 'inTabset',
                       selected = 'results')
   })
@@ -133,11 +146,6 @@ function(input, output, session) {
   })
   # Creates a proxy table for clearing rows
   proxy = dataTableProxy('movie_table')
-  
-  # Render critic match table
-  output$match_table = DT::renderDataTable({
-    datatable(critic_match_df, rownames = FALSE)
-  })
   
   # Initialize equivalent variables in UI for movie title
   output$movie1 = renderText({ input$movie1 })

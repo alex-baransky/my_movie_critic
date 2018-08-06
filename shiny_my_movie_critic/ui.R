@@ -92,6 +92,8 @@ fluidPage(
                       ),
                       # Action button to go to the next tab
                       fluidRow(
+                        actionButton("clearRating", "Reset Ratings", icon("eraser"),
+                                     style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
                         actionButton("toResults", "Submit", icon("arrow-right"), 
                                      style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
                       ),
