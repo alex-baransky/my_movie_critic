@@ -40,6 +40,8 @@ fluidPage(
                           textInput("movie5", "Movie 5", "---Fifth movie---")
                         ),
                         fluidRow(
+                          actionButton("clearRows", "Clear Selected Movies", icon("eraser"),
+                                       style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
                           actionButton("toRate", "Submit", icon("arrow-right"), 
                                        style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
                         ),
@@ -51,34 +53,34 @@ fluidPage(
              tabPanel(title = "Rate", value = 'rate',
                       fluidRow(
                         h2('Rate Your Movies'),
-                        h4('Please rate each movie on a scale of 1 to 10 (1 is the worst, 10 is the best).')
+                        h4('Please rate each movie on a scale of 0 to 10 (0 is the worst, 10 is the best).')
                       ),
                       fluidRow(
                         # Display user's selected  movies
                         textOutput('movie1'),
                         # Add radio buttons for user to rate the movie
-                        prettyRadioButtons("rating1", label = NULL,
-                                           1:10, inline = TRUE, selected = 1, animation = 'pulse', icon = icon('star'))
+                        prettyRadioButtons(inputId = "rating1", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
                       ),
                       fluidRow(
                         textOutput('movie2'),
-                        prettyRadioButtons("rating2", label = NULL,
-                                           1:10, inline = TRUE, selected = 1, animation = 'pulse', icon = icon('star'))
+                        prettyRadioButtons(inputId = "rating2", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
                       ),
                       fluidRow(
                         textOutput('movie3'),
-                        prettyRadioButtons("rating3", label = NULL,
-                                           1:10, inline = TRUE, selected = 1, animation = 'pulse', icon = icon('star'))
+                        prettyRadioButtons(inputId = "rating3", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
                       ),
                       fluidRow(
                         textOutput('movie4'),
-                        prettyRadioButtons("rating4", label = NULL,
-                                           1:10, inline = TRUE, selected = 1, animation = 'pulse', icon = icon('star'))
+                        prettyRadioButtons(inputId = "rating4", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
                       ),
                       fluidRow(
                         textOutput('movie5'),
-                        prettyRadioButtons("rating5", label = NULL,
-                                           1:10, inline = TRUE, selected = 1, animation = 'pulse', icon = icon('star'))
+                        prettyRadioButtons(inputId = "rating5", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
                       ),
                       # Make movie title text larger
                       tags$head(
@@ -93,13 +95,18 @@ fluidPage(
                         actionButton("toResults", "Submit", icon("arrow-right"), 
                                      style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
                       ),
+                      fluidRow(
+                        h4('Please be patient, this may take a few seconds...')
+                      ),
                       br(),
                       br()
              ),
              # Show results tab
              tabPanel(title = "Results", value = 'results',
                       fluidRow(
-                        h3('Here are your matched critics')
+                        h3('Here are your matched critics'),
+                        br(),
+                        DT::dataTableOutput("match_table")
                       )
              ),
              # About me tab
