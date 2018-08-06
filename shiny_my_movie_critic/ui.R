@@ -16,11 +16,9 @@ fluidPage(
              tabPanel(title = "Choose Your Movies", value = 'choose',
                       mainPanel(
                         h2('Choose Your Movies'),
-                        h4('Please CHOOSE FIVE (5) MOVIES from the table below. You can use the search function\
-                             to find specific titles.'),
-                        h4('Make sure to ENTER THE TITLES EXACTLY AS YOU SEE THEM in the table!'),
-                        h4('You can add a movie more than once if you want to give it a higher\
-                              weight in the critic matching.'),
+                        h4('Please CHOOSE FIVE (5) UNIQUE MOVIES from the table below. You can use the search function\
+                             to find specific titles. Clicking the rows will add the movie title to the text boxes.'),
+                        h4('If you enter the titles manually, please make sure to ENTER THE TITLES EXACTLY AS YOU SEE THEM in the table!'),
                         br(),
                         DT::dataTableOutput("movie_table"),
                         br(),
