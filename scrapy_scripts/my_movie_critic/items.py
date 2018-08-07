@@ -13,3 +13,4 @@ class MovieReviewItem(scrapy.Item):
     movie = scrapy.Field()
     org = scrapy.Field()
     score = scrapy.Field()
+    avg_rating = scrapy.Field()

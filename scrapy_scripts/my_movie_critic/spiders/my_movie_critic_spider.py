@@ -29,7 +29,9 @@ class MovieReviewSpider(Spider):
 
         # Find the url to All Critics page
         review_url = response.xpath('//p[@id="criticHeaders"]/a/@href').extract()[0]
-        yield Request(url = ('https://www.rottentomatoes.com' + review_url), callback = self.parse_review_page)
+        avg_rating = response.xpath('//div[@id="scoreStats"]/div/text()').extract()[1].strip()
+
+        yield Request(url = ('https://www.rottentomatoes.com' + review_url), meta = {'avg_rating': avg_rating}, callback = self.parse_review_page)
 
     def parse_review_page(self, response):
         # This function parses each page of the All Critics section of a movie
@@ -38,6 +40,7 @@ class MovieReviewSpider(Spider):
         reviews = response.xpath('//div[@class="row review_table_row"]')
         # Find movie title
         movie = response.xpath('//div[@class="panel-body content_body"]//h2/a/text()').extract_first()
+        avg_rating = response.meta['avg_rating']
 
         for review in reviews:
             critic = review.xpath('.//div[@class="col-sm-13 col-xs-24 col-sm-pull-4 critic_name"]/a/text()').extract_first()
@@ -62,6 +65,7 @@ class MovieReviewSpider(Spider):
             item['movie'] = movie
             item['org'] = org
             item['score'] = score
+            item['avg_rating'] = avg_rating
 
             yield item
 
@@ -71,7 +75,7 @@ class MovieReviewSpider(Spider):
 
         # Follow the remaining review page urls
         for url in following_urls:
-            yield Request(url = url, meta = {'movie': movie}, callback = self.parse_following_review_page)
+            yield Request(url = url, meta = {'movie': movie, 'avg_rating': avg_rating}, callback = self.parse_following_review_page)
 
     def parse_following_review_page(self, response):
         # This function parses the remaining review pages
@@ -80,6 +84,7 @@ class MovieReviewSpider(Spider):
         reviews = response.xpath('//div[@class="row review_table_row"]')
         # Retrieve movie title as meta data
         movie = response.meta['movie']
+        avg_rating = response.meta['avg_rating']
 
         for review in reviews:
             critic = review.xpath('.//div[@class="col-sm-13 col-xs-24 col-sm-pull-4 critic_name"]/a/text()').extract_first()
@@ -104,5 +109,6 @@ class MovieReviewSpider(Spider):
             item['movie'] = movie
             item['org'] = org
             item['score'] = score
+            item['avg_rating'] = avg_rating
 
             yield item

@@ -112,7 +112,6 @@ fluidPage(
                         DT::dataTableOutput("match_table"), width = 12, title = 'Your Closest Matched Critics'),
                       fluidRow(
                         h2('Movie Reviews By', textOutput('selected_critic')),
-                        # h2(textOutput('selected_critic')),
                         column(h3('Movies to See'),
                         DT::dataTableOutput('see_movies'), width = 6, title = 'Movies to Check Out'),
                         column(h3('Movies to Avoid'),
