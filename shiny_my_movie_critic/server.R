@@ -12,6 +12,8 @@ function(input, output, session) {
   
   # Performs a number of opertaions to create a critic match dataframe
   critic_match_df = reactive({
+    # Produces a progress bar to let user know something is happening in the app
+    withProgress(message = 'Creating match table', value = 0, {
     # Creates a dataframe that includes observations of only the five movies chosen by the user
     my_movies = filter_movies(movie_df, movie_vec())
     # See funtion in global.R
@@ -36,10 +38,12 @@ function(input, output, session) {
       movie3_col = c(movie3_col, total_scores[[i]][[3]][[3]][[2]])
       movie4_col = c(movie4_col, total_scores[[i]][[3]][[4]][[2]])
       movie5_col = c(movie5_col, total_scores[[i]][[3]][[5]][[2]])
+      incProgress(0, detail = paste("Converting critic scores to dataframe"))
     }
     # Creates org column vector to display critic associated orgs
     for (name in just_critics){
       org_col = c(org_col, paste(unique(filter(movie_df, critic == name)$org), collapse = '|'))
+      incProgress(1/length(just_critics), detail = paste("Converting organization column for", name))
     }
     # Creates a dataframe using columns above
     critic_df = data.frame(critic = critic_col, orgs = org_col, user_movies_reviewed = count_col, movie1 = movie1_col,
@@ -52,9 +56,13 @@ function(input, output, session) {
       mutate(movie1_diff = abs(score_vec()[1] - movie1)*10, movie2_diff = abs(score_vec()[2] - movie2)*10,
              movie3_diff = abs(score_vec()[3] - movie3)*10, movie4_diff = abs(score_vec()[4] - movie4)*10,
              movie5_diff = abs(score_vec()[5] - movie5)*10) %>%
+      mutate(movie1_sq = ((score_vec()[1] - movie1)*10)^2, movie2_sq = ((score_vec()[2] - movie2)*10)^2,
+             movie3_sq = ((score_vec()[3] - movie3)*10)^2, movie4_sq = ((score_vec()[4] - movie4)*10)^2,
+             movie5_sq = ((score_vec()[5] - movie5)*10)^2) %>%
       rowwise() %>% 
       mutate(diff_sum = sum(movie1_diff, movie2_diff, movie3_diff, movie4_diff, movie5_diff, na.rm = TRUE)) %>% 
-      select(critic, orgs, user_movies_reviewed, diff_sum) %>%
+      mutate(sq_sum = sum(movie1_sq, movie2_sq, movie3_sq, movie4_sq, movie5_sq, na.rm = TRUE)) %>% 
+      select(critic, orgs, user_movies_reviewed, diff_sum, sq_sum) %>%
       as.data.table() %>% 
       top_n(-5, diff_sum)
     # Does the same as above except for user movies reviewed = 4 
@@ -63,9 +71,13 @@ function(input, output, session) {
       mutate(movie1_diff = abs(score_vec()[1] - movie1)*10, movie2_diff = abs(score_vec()[2] - movie2)*10,
              movie3_diff = abs(score_vec()[3] - movie3)*10, movie4_diff = abs(score_vec()[4] - movie4)*10,
              movie5_diff = abs(score_vec()[5] - movie5)*10) %>%
+      mutate(movie1_sq = ((score_vec()[1] - movie1)*10)^2, movie2_sq = ((score_vec()[2] - movie2)*10)^2,
+             movie3_sq = ((score_vec()[3] - movie3)*10)^2, movie4_sq = ((score_vec()[4] - movie4)*10)^2,
+             movie5_sq = ((score_vec()[5] - movie5)*10)^2) %>%
       rowwise() %>% 
       mutate(diff_sum = sum(movie1_diff, movie2_diff, movie3_diff, movie4_diff, movie5_diff, na.rm = TRUE)) %>% 
-      select(critic, orgs, user_movies_reviewed, diff_sum) %>%
+      mutate(sq_sum = sum(movie1_sq, movie2_sq, movie3_sq, movie4_sq, movie5_sq, na.rm = TRUE)) %>% 
+      select(critic, orgs, user_movies_reviewed, diff_sum, sq_sum) %>%
       as.data.table() %>% 
       top_n(-5, diff_sum)
     # Does the same as above except for user movies reviewed = 3
@@ -74,20 +86,25 @@ function(input, output, session) {
       mutate(movie1_diff = abs(score_vec()[1] - movie1)*10, movie2_diff = abs(score_vec()[2] - movie2)*10,
              movie3_diff = abs(score_vec()[3] - movie3)*10, movie4_diff = abs(score_vec()[4] - movie4)*10,
              movie5_diff = abs(score_vec()[5] - movie5)*10) %>%
+      mutate(movie1_sq = ((score_vec()[1] - movie1)*10)^2, movie2_sq = ((score_vec()[2] - movie2)*10)^2,
+             movie3_sq = ((score_vec()[3] - movie3)*10)^2, movie4_sq = ((score_vec()[4] - movie4)*10)^2,
+             movie5_sq = ((score_vec()[5] - movie5)*10)^2) %>%
       rowwise() %>% 
       mutate(diff_sum = sum(movie1_diff, movie2_diff, movie3_diff, movie4_diff, movie5_diff, na.rm = TRUE)) %>% 
-      select(critic, orgs, user_movies_reviewed, diff_sum) %>%
+      mutate(sq_sum = sum(movie1_sq, movie2_sq, movie3_sq, movie4_sq, movie5_sq, na.rm = TRUE)) %>% 
+      select(critic, orgs, user_movies_reviewed, diff_sum, sq_sum) %>%
       as.data.table() %>% 
       top_n(-5, diff_sum)
     
     # Combines the above 3 dataframes
     critic_match_df = rbind(usermovies5, usermovies4, usermovies3)
     # Orders resulting dataframe based on greatest user movies reviewed, then by lowest sum
-    critic_match_df = critic_match_df[with(critic_match_df, order(-user_movies_reviewed, diff_sum)),]
+    critic_match_df = critic_match_df[with(critic_match_df, order(-user_movies_reviewed, diff_sum, sq_sum)),]
     critic_match_df = critic_match_df %>%
       select('Critic Name' = critic, 'Organisation(s)' = orgs, 'How Many of Your Movies Scored?' = user_movies_reviewed,
-             'Critic Match Score' = diff_sum)
+             'Absolute Distance Score' = diff_sum, 'Squared Distance Score' = sq_sum)
     return(critic_match_df)
+  })
   })
   
   # Creates a proxy table for clearing rows
@@ -203,7 +220,7 @@ function(input, output, session) {
       top_movies = movie_df[movie_df$critic == critic_match_df()$`Critic Name`[row],] %>%
         filter(score >= .8) %>%
         select(movie, score)
-      top_movies = top_movies[order(-top_movies$score),] %>%
+      top_movies = top_movies[order(-top_movies$score, top_movies$movie),] %>%
         mutate(score = paste(score*10, '10', sep = '/')) %>%
         select('Movie Title' = movie, 'Critic Score' = score)
       datatable(top_movies, rownames = FALSE, selection = 'none')
