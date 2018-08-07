@@ -117,6 +117,14 @@ fluidPage(
                         column(h3('Movies to Avoid'),
                         DT::dataTableOutput('avoid_movies'), width = 6, title = 'Movies to Avoid'))
                       ),
+             # Show critic specific tab
+             tabPanel(title = 'Your Critic', value = 'your_critic',
+                      fluidRow(
+                        h3('Here you can select from your matched critics to find movies you normally wouldn\'t think to watch!'),
+                        br(),
+                        uiOutput('inspect_critic')
+                      )
+             ),
              # About me tab
              tabPanel(title = "About", value = 'about',
                       h3('My name is Alex Baransky...')

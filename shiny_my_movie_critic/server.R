@@ -207,6 +207,13 @@ function(input, output, session) {
     datatable(just_movies, rownames = FALSE)
   })
   
+  # Creates a selectizeInput to pick critics to inspect
+  output$inspect_critic = renderUI({
+    critic_names = as.character(critic_match_df()$`Critic Name`)
+    selectizeInput(inputId = 'this_critic', label = 'Select a critic to inspect more closely:',
+                   choices = critic_names)
+  })
+  
   # Creates the critic match dataframe and changes to results tab
   observeEvent(input$toResults, {
     # Create critic match dataframe
