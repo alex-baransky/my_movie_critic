@@ -101,6 +101,7 @@ function(input, output, session) {
     # Orders resulting dataframe based on greatest user movies reviewed, then by lowest sum
     critic_match_df = critic_match_df[with(critic_match_df, order(-user_movies_reviewed, diff_sum, sq_sum)),]
     critic_match_df = critic_match_df %>%
+      mutate(sq_sum = round(sq_sum, digits = 3)) %>% 
       select('Critic Name' = critic, 'Organisation(s)' = orgs, 'How Many of Your Movies Scored?' = user_movies_reviewed,
              'Absolute Distance Score' = diff_sum, 'Squared Distance Score' = sq_sum)
     return(critic_match_df)
@@ -177,18 +178,27 @@ function(input, output, session) {
     }
   })
   
-  # Checks if user movie selections are invalid, if true display error message and ask user to try again
-  # if false, continue to rate tab
+  # Checks if user movie selections are valid, if true contiue to next tab,
+  # if false, print out one of several error messages and ask user to retry
   observeEvent(input$toRate, {
     default_movies = c('---First Movie---', '---Second Movie---', '---Third Movie---', '---Fourth Movie---', '---Fifth Movie---')
-    # Check if error producing input exists, produces error message if true, continues if false
-    if ((length(unique(movie_vec())) != 5) | (any(movie_vec() %in% default_movies))){
-      output$wrongMovies = renderText({'Please select FIVE (5) UNIQUE movies and then click "Submit" again!'})
-    }
-    else{
+    
+    if ((length(unique(movie_vec())) == 5) & (all(movie_vec() %in% just_movies$`Movie Title`))){
       output$wrongMovies = renderText({NULL})
       updateTabsetPanel(session, 'inTabset',
                         selected = 'rate')
+    }
+    else if (length(unique(movie_vec())) != 5){
+      output$wrongMovies = renderText({'Please select five UNIQUE movies and then click "Submit" again!'})
+    }
+    else if (any(movie_vec() %in% default_movies)){
+      output$wrongMovies = renderText({'One or more of your movies have not been selected, please select five movies, then click "Submit" again!'})
+    }
+    else if (any(movie_vec() %in% c('', ' ', '   '))){
+      output$wrongMovies = renderText({'One of the input boxes is empty, please select five movies, then click "Submit" again!'})
+    }
+    else{
+      output$wrongMovies = renderText({'There is a strange error with your movie input, please check that your selected movies are correct, then click "Submit" again!'})
     }
   })
   
@@ -212,11 +222,12 @@ function(input, output, session) {
   })
   
   # If user selects a row in match table, create dataframe of that critic's top rated movies
-  # and display below
+  # and lowest rated movies and display below
   observeEvent(input$match_table_rows_selected, {
     row = input$match_table_rows_selected
-
-    output$temp_table = DT::renderDataTable({
+    
+    output$selected_critic = renderText({ as.character(critic_match_df()$`Critic Name`[row]) })
+    output$see_movies = DT::renderDataTable({
       top_movies = movie_df[movie_df$critic == critic_match_df()$`Critic Name`[row],] %>%
         filter(score >= .8) %>%
         select(movie, score)
@@ -224,6 +235,16 @@ function(input, output, session) {
         mutate(score = paste(score*10, '10', sep = '/')) %>%
         select('Movie Title' = movie, 'Critic Score' = score)
       datatable(top_movies, rownames = FALSE, selection = 'none')
+    })
+    
+    output$avoid_movies = DT::renderDataTable({
+      bottom_movies = movie_df[movie_df$critic == critic_match_df()$`Critic Name`[row],] %>%
+        filter(score <= .3) %>%
+        select(movie, score)
+      bottom_movies = bottom_movies[order(bottom_movies$score, bottom_movies$movie),] %>%
+        mutate(score = paste(score*10, '10', sep = '/')) %>%
+        select('Movie Title' = movie, 'Critic Score' = score)
+      datatable(bottom_movies, rownames = FALSE, selection = 'none')
     })
   })
 }

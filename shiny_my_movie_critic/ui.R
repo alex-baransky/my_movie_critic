@@ -38,9 +38,9 @@ fluidPage(
                           textInput("movie5", "Movie 5", "---Fifth Movie---")
                         ),
                         fluidRow(
-                          actionButton("clearRows", "Clear Selected Movies", icon("eraser"),
-                                       style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
                           actionButton("toRate", "Submit", icon("arrow-right"), 
+                                       style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
+                          actionButton("clearRows", "Clear Selected Movies", icon("eraser"),
                                        style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
                         ),
                         fluidRow(
@@ -93,9 +93,9 @@ fluidPage(
                       ),
                       # Action button to go to the next tab
                       fluidRow(
-                        actionButton("clearRating", "Reset Ratings", icon("eraser"),
-                                     style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
                         actionButton("toResults", "Submit", icon("arrow-right"), 
+                                     style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
+                        actionButton("clearRating", "Reset Ratings", icon("eraser"),
                                      style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
                       ),
                       fluidRow(
@@ -109,11 +109,15 @@ fluidPage(
                       fluidRow(
                         h3('Here are your matched critics'),
                         br(),
-                        DT::dataTableOutput("match_table")),
+                        DT::dataTableOutput("match_table"), width = 12, title = 'Your Closest Matched Critics'),
                       fluidRow(
-                        DT::dataTableOutput('temp_table')
-                      )
-             ),
+                        h2('Movie Reviews By', textOutput('selected_critic')),
+                        # h2(textOutput('selected_critic')),
+                        column(h3('Movies to See'),
+                        DT::dataTableOutput('see_movies'), width = 6, title = 'Movies to Check Out'),
+                        column(h3('Movies to Avoid'),
+                        DT::dataTableOutput('avoid_movies'), width = 6, title = 'Movies to Avoid'))
+                      ),
              # About me tab
              tabPanel(title = "About", value = 'about',
                       h3('My name is Alex Baransky...')
