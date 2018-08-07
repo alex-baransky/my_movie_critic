@@ -5,14 +5,6 @@ library(data.table)
 library(shinythemes)
 library(shinyWidgets)
 
-critic_col = character()
-org_col = character()
-count_col = numeric()
-movie1_col = numeric()
-movie2_col = numeric()
-movie3_col = numeric()
-movie4_col = numeric()
-movie5_col = numeric()
 # Load intial data table
 movie_df = read.csv('./movie_df.csv', stringsAsFactors = FALSE)
 # Dataframe containing just movie titles, sorted alphabetically,

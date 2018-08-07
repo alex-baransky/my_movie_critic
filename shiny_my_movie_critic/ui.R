@@ -24,24 +24,27 @@ fluidPage(
                         br(),
                         fluidRow(
                           splitLayout(
-                            textInput("movie1", "Movie 1", "---First movie---"),
-                            textInput("movie2", "Movie 2", "---Second movie---")
+                            textInput("movie1", "Movie 1", "---First Movie---"),
+                            textInput("movie2", "Movie 2", "---Second Movie---")
                           )
                         ),
                         fluidRow(
                           splitLayout(
-                            textInput("movie3", "Movie 3", "---Third movie---"),
-                            textInput("movie4", "Movie 4", "---Fourth movie---")
+                            textInput("movie3", "Movie 3", "---Third Movie---"),
+                            textInput("movie4", "Movie 4", "---Fourth Movie---")
                           )
                         ),
                         fluidRow(
-                          textInput("movie5", "Movie 5", "---Fifth movie---")
+                          textInput("movie5", "Movie 5", "---Fifth Movie---")
                         ),
                         fluidRow(
                           actionButton("clearRows", "Clear Selected Movies", icon("eraser"),
                                        style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
                           actionButton("toRate", "Submit", icon("arrow-right"), 
                                        style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
+                        ),
+                        fluidRow(
+                          h3(textOutput("wrongMovies"))
                         ),
                         br(),
                         br()
@@ -106,7 +109,9 @@ fluidPage(
                       fluidRow(
                         h3('Here are your matched critics'),
                         br(),
-                        DT::dataTableOutput("match_table")
+                        DT::dataTableOutput("match_table")),
+                      fluidRow(
+                        DT::dataTableOutput('temp_table')
                       )
              ),
              # About me tab
