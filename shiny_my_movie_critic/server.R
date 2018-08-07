@@ -99,11 +99,11 @@ function(input, output, session) {
     # Combines the above 3 dataframes
     critic_match_df = rbind(usermovies5, usermovies4, usermovies3)
     # Orders resulting dataframe based on greatest user movies reviewed, then by lowest sum
-    critic_match_df = critic_match_df[with(critic_match_df, order(-user_movies_reviewed, diff_sum, sq_sum)),]
+    critic_match_df = critic_match_df[with(critic_match_df, order(-user_movies_reviewed, sq_sum, diff_sum)),]
     critic_match_df = critic_match_df %>%
       mutate(sq_sum = round(sq_sum, digits = 3)) %>% 
       select('Critic Name' = critic, 'Organisation(s)' = orgs, 'How Many of Your Movies Scored?' = user_movies_reviewed,
-             'Absolute Distance Score' = diff_sum, 'Squared Distance Score' = sq_sum)
+             'Squared Distance Score' = sq_sum, 'Absolute Distance Score' = diff_sum)
     return(critic_match_df)
   })
   })
