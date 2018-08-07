@@ -102,7 +102,7 @@ function(input, output, session) {
     critic_match_df = critic_match_df[with(critic_match_df, order(-user_movies_reviewed, sq_sum, diff_sum)),]
     critic_match_df = critic_match_df %>%
       mutate(sq_sum = round(sq_sum, digits = 3)) %>% 
-      select('Critic Name' = critic, 'Organisation(s)' = orgs, 'How Many of Your Movies Scored?' = user_movies_reviewed,
+      select('Critic Name' = critic, 'Organisation(s)' = orgs, 'How Many of Your Movies Reviewed?' = user_movies_reviewed,
              'Squared Distance Score' = sq_sum, 'Absolute Distance Score' = diff_sum)
     return(critic_match_df)
   })
