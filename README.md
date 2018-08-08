@@ -10,3 +10,6 @@ Unlike other algorithms that simply suggest movies you might enjoy, this applica
 I created this application as a project for the NYC Data Science Academy Immersive Data Science Bootcamp. Using the scrapy python package, I extracted the data that the app uses behind the scenes to perform the critic match. This application uses movie review data from RottenTomatoes.com to calculate the matches. The data consists of over 1,000 movies and ratings for each movie from almost 3,500 certified movie critics. The movies include top rated films between the years 2000 and 2018 and only those films that were reviewed by 100 or more critics.
 
 Please feel free to e-mail me with any questions.
+
+
+https://docs.google.com/presentation/d/1aLzwwOlWCkuokLhDaM1Lwvei66yLtV5oRSjLZT2jYpQ/edit?usp=sharing
