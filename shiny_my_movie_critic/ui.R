@@ -61,59 +61,57 @@ fluidPage(
              ),
              # Rate movies tab
              tabPanel(title = "Rate", value = 'rate',
-                      column(width =  8, align = 'center',
-                             fluidRow(
-                               h2('Rate Your Movies', style = 'text-align:center'),
-                               h4('Please rate each movie on a scale of 0 to 10 (0 is worst, 10 is best).')
-                             ),
-                             fluidRow(
-                               # Display user's selected  movies
-                               textOutput('movie1'),
-                               # Add radio buttons for user to rate the movie
-                               prettyRadioButtons(inputId = "rating1", label = NULL,
-                                                  0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
-                             ),
-                             fluidRow(
-                               textOutput('movie2'),
-                               prettyRadioButtons(inputId = "rating2", label = NULL,
-                                                  0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
-                             ),
-                             fluidRow(
-                               textOutput('movie3'),
-                               prettyRadioButtons(inputId = "rating3", label = NULL,
-                                                  0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
-                             ),
-                             fluidRow(
-                               textOutput('movie4'),
-                               prettyRadioButtons(inputId = "rating4", label = NULL,
-                                                  0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
-                             ),
-                             fluidRow(
-                               textOutput('movie5'),
-                               prettyRadioButtons(inputId = "rating5", label = NULL,
-                                                  0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
-                             ),
-                             # Make movie title text larger
-                             tags$head(
-                               tags$style("#movie1{font-size: 18px}"),
-                               tags$style("#movie2{font-size: 18px}"),
-                               tags$style("#movie3{font-size: 18px}"),
-                               tags$style("#movie4{font-size: 18px}"),
-                               tags$style("#movie5{font-size: 18px}")
-                             ),
-                             # Action button to go to the next tab
-                             fluidRow(
-                               actionButton("toMatches", "Submit", icon("arrow-right"), 
-                                            style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
-                               actionButton("clearRating", "Reset Ratings", icon("eraser"),
-                                            style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
-                             ),
-                             fluidRow(
-                               h4('Loading progress will be shown in bottom right corner.'),
-                               h4('Please be patient, this may take a few seconds...')
-                             ),
-                             br()
-                      )
+                      fluidRow(
+                        h2('Rate Your Movies'),
+                        h4('Please rate each movie on a scale of 0 to 10 (0 is worst, 10 is best).')
+                      ),
+                      fluidRow(
+                        # Display user's selected  movies
+                        textOutput('movie1'),
+                        # Add radio buttons for user to rate the movie
+                        prettyRadioButtons(inputId = "rating1", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
+                      ),
+                      fluidRow(
+                        textOutput('movie2'),
+                        prettyRadioButtons(inputId = "rating2", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
+                      ),
+                      fluidRow(
+                        textOutput('movie3'),
+                        prettyRadioButtons(inputId = "rating3", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
+                      ),
+                      fluidRow(
+                        textOutput('movie4'),
+                        prettyRadioButtons(inputId = "rating4", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
+                      ),
+                      fluidRow(
+                        textOutput('movie5'),
+                        prettyRadioButtons(inputId = "rating5", label = NULL,
+                                           0:10, inline = TRUE, selected = 0, animation = 'pulse', icon = icon('star'))
+                      ),
+                      # Make movie title text larger
+                      tags$head(
+                        tags$style("#movie1{font-size: 18px}"),
+                        tags$style("#movie2{font-size: 18px}"),
+                        tags$style("#movie3{font-size: 18px}"),
+                        tags$style("#movie4{font-size: 18px}"),
+                        tags$style("#movie5{font-size: 18px}")
+                      ),
+                      # Action button to go to the next tab
+                      fluidRow(
+                        actionButton("toMatches", "Submit", icon("arrow-right"), 
+                                     style="color: #318fe0; background-color: #337ab7; border-color: #318fe0"),
+                        actionButton("clearRating", "Reset Ratings", icon("eraser"),
+                                     style="color: #318fe0; background-color: #337ab7; border-color: #318fe0")
+                      ),
+                      fluidRow(
+                        h4('Loading progress will be shown in bottom right corner.'),
+                        h4('Please be patient, this may take a few seconds...')
+                      ),
+                      br()
              ),
              # Show results tab
              tabPanel(title = "Your Matches", value = 'matches',
@@ -164,7 +162,7 @@ fluidPage(
              ),
              # About me tab
              tabPanel(title = "About", value = 'about',
-                      h3('Thanks for using my application!', style = 'text-align:center'),
+                      h2('Thanks for using my application!', style = 'text-align:center'),
                       tags$img(src = 'alexb_headshot.jpg', width = 300, height = 300, style="display: block; margin-left: auto; margin-right: auto;"),
                       h4('My name is Alex Baransky (alex.baransky@gmail.com). I graduated from Columbia University\
                           in 2017 with a major in Environmental Biology. Before that, I had completed three years\
