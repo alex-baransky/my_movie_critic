@@ -254,7 +254,7 @@ function(input, output, session) {
   observeEvent(input$match_table_rows_selected, {
     row = input$match_table_rows_selected
     
-    output$selected_critic = renderText({ as.character(critic_match_df()$`Critic Name`[row]) })
+    output$selected_critic = renderText({ paste('Movies Reviewed by', as.character(critic_match_df()$`Critic Name`[row])) })
     
     output$see_movies = DT::renderDataTable({
       top_movies = movie_df[movie_df$critic == critic_match_df()$`Critic Name`[row],] %>%
