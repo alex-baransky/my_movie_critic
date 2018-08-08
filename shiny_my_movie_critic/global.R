@@ -6,7 +6,7 @@ library(shinythemes)
 library(shinyWidgets)
 
 # Load intial data table
-movie_df = read.csv('./movie_df.csv', stringsAsFactors = FALSE)
+movie_df = read.csv('./movie_df.csv', stringsAsFactors = FALSE, encoding = 'UTF-8')
 # Dataframe containing just movie titles, sorted alphabetically,
 # used for showing movies in datatable
 just_movies = movie_df[order(movie_df$movie),] %>% 

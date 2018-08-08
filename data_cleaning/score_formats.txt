@@ -1,19 +1,21 @@
 Score formats:
 
-X-Y Stars
-1/5
-1/4
-8.0/10
-70/100
+3-5 Stars  = 3/5
+3 out of 5 = 3/5
+1/5        = 1/5
+1/4        = 1/4
+8.0/10     = 8/10
+70/100     = 70/100
+4 of 5     = 4/5
+4:5        = 4/5
+***        = 3/5
+***1/2     = 3.5/5
 A-
 A minus
-***
+B=
+B?
 not recommended
 recommended
-4 of 5
-4:5
-B=
-
 
 
 A+ = 1
