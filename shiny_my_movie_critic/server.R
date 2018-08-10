@@ -50,12 +50,12 @@ function(input, output, session) {
         movie3_col = c(movie3_col, total_scores[[i]][[3]][[3]][[2]])
         movie4_col = c(movie4_col, total_scores[[i]][[3]][[4]][[2]])
         movie5_col = c(movie5_col, total_scores[[i]][[3]][[5]][[2]])
-        incProgress(0, detail = paste("Converting critic scores to dataframe"))
+        incProgress(.5/length(total_scores), detail = paste("Converting critic scores to dataframe: row", i))
       }
       # Creates org column vector to display critic associated orgs
       for (name in just_critics){
         org_col = c(org_col, paste(unique(filter(movie_df, critic == name)$org), collapse = '|'))
-        incProgress(1/length(just_critics), detail = paste("Creating organization column for", name))
+        incProgress(.5/length(just_critics), detail = paste("Creating organization column for critic:", name))
       }
       # Creates a dataframe using columns above
       critic_df = data.frame(critic = critic_col, orgs = org_col, user_movies_reviewed = count_col, movie1 = movie1_col,
